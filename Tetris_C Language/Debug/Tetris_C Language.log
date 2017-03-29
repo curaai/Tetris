@@ -1,0 +1,4 @@
+﻿  show_screen.c
+c:\users\dsm2016\documents\visual studio 2015\projects\tetris_c language\tetris_c language\show_screen.c(137): warning C4013: 'gets'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+  Tetris_C Language.vcxproj -> C:\Users\dsm2016\documents\visual studio 2015\Projects\Tetris_C Language\Debug\Tetris_C Language.exe
+  Tetris_C Language.vcxproj -> C:\Users\dsm2016\documents\visual studio 2015\Projects\Tetris_C Language\Debug\Tetris_C Language.pdb (Full PDB)
