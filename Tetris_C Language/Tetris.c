@@ -285,6 +285,31 @@ int checkshape(BLOCK* block)
 	}
 	return 1;
 }
+/*
+Method to make block destination for use screen[y][x]=2
+and show block detination
+*/
+void blockdestination(BLOCK *future) 
+{
+
+	int x, y, shape, direction;
+
+	while (checkdown(future)) // blcok down while screen[y][x]=1
+		future->block_y++;
+
+	shape = future->shape;
+	direction = future->direction;
+
+	//shape's fill part to move screen
+	for (y = 0; y < 4; y++) {
+		for (x = 0; x < 4; x++) {
+			if (shapes[shape][direction][y][x] == 1) {
+				screen[future->block_y + y][future->block_x + x] = 2;
+			}
+		}
+	}
+
+}
 //Method to control block according to the movement keys pressed
 void control_shape(BLOCK* block)
 {
@@ -342,6 +367,16 @@ int Check_Over(void)
 	return 0;
 }
 /*
+Method to set future block for set dstination
+*/
+void copyblock(BLOCK *block, BLOCK *copy)
+{
+	copy->block_y = 0;
+	copy->block_x = block->block_x;
+	copy->direction = block->direction;
+	copy->shape = block->shape;
+}
+/*
 Method to carry out the overall execution of tetris
 Function:	Move blocks down, Change the block according to the keyboard input,
 Print the block, Remove the completed line, Check whether the game is over
@@ -362,7 +397,8 @@ void run_game(BLOCK* block)
 				i = 0;
 				block->block_y++;	//if (i==3) move block one down
 			}
-
+			copyblock(block, future); // set future block
+			blockdestination(future); //make destination
 			control_shape(block);	// If there is a keyboard input, change the shape of the block.
 			
 			input_block(block);		//Fill the screen array with blocks.
@@ -376,6 +412,14 @@ void run_game(BLOCK* block)
 				break;
 			//remove current block
 			Remove_Block(block);
+			for (y = 0; y < SCREEN_HEIGHT; y++) // remove pre dstination
+			{
+				for (x = 0; x < SCREEN_WIDTH; x++)
+				{
+					if (screen[y][x] == 2)
+						screen[y][x] = 0;
+				}
+			}
 			Sleep(100);		//Do nothing for 0.1 seconds.
 		while (1)
 		{

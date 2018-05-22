@@ -42,7 +42,11 @@ void show_screen(void)
 		set_cursor(5, 2 + i);
 
 		for (j = 0; j < SCREEN_WIDTH; j++) {
-			if (screen[i][j] == 1)
+			if (screen[i][j] == 2) // block destination
+			{
+				printf("бр");
+			}
+			else if (screen[i][j] == 1)
 			{
 				if (j == SCREEN_LEFT_EDGE && i == SCREEN_DOWN_EDGE)
 					printf("в╔");  //map
