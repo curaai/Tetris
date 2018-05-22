@@ -4,11 +4,14 @@
 #include "show.h"
 
 
-//make random int from 0~limit-1 
+/*
+Method to make random int from 0 to limit-1
+Returns an integer that determines one of the seven shapes of the block.
+*/
 int make_randint(int limit)
 {
 	srand((unsigned)time(NULL));
-	return rand() % limit;
+	return rand() % limit; //returns random number below the limit; //todo: should not restore the formula immediately.
 }
 
 BLOCK* first_block(void)
@@ -329,56 +332,61 @@ int Check_Over(void)
 	}
 	return 0;
 }
+/*
+Method to carry out the overall execution of tetris
+Function:	Move blocks down, Change the block according to the keyboard input,
+Print the block, Remove the completed line, Check whether the game is over
+*/
 void run_game(BLOCK* block)
 {
-	int i = 0, line;
+	int i = 0, line; //Initializing for Repetition
 
-	remove_cursor();
+	remove_cursor(); //remove cursor on screen
 
-	show_nextshape();
+	show_nextshape(); //print the next block
 
-	while (1) {
-		while (1) {
+	while (1) { //the loop ends when the game is over
+		while (1) { //the loop ends when the block is collide bottom
 			//to move block fast
 			i++;
 			if (i == 3) {
 				i = 0;
-				block->block_y++;
+				block->block_y++;	//if (i==3) move block one down
 			}
 
-			control_shape(block);
-			//fill that block to array
-			input_block(block);
-			//print screen
-			show_screen();
+			control_shape(block);	// If there is a keyboard input, change the shape of the block.
+			
+			input_block(block);		//Fill the screen array with blocks.
+			
+			show_screen();		//print screen
 			//change place(side) and direction
+			
 
 			//if next place(down) is filled break while and make new block
 			if (checkdown(block) == 0)
 				break;
 			//remove current block
 			Remove_Block(block);
-			Sleep(100);
-		}
+			Sleep(100);		//Do nothing for 0.1 seconds.
 		while (1)
 		{
-			line = Clear_Line();
-			if (line == 0)
+			line = Clear_Line();	/*Check how many lines are cleared, and then insert the value into the line variable. */
+			if (line == 0)	// If there are no lines to erase, break.
 				break;
-			Shift_Screen(line);
+			Shift_Screen(line);	//Erase the line and print out the screen.
 		}
 
-		if (Check_Over())
+		if (Check_Over())	//Check to see if the game is over.
 			break;
 
 		//make new block
 		block = make_block(block);
-		next_shape = make_randint(7);
+		next_shape = make_randint(7);	//make random integer 0~6
 
 		remove_cursor();
 		show_nextshape();
-
-		if (block->shape == next_shape && next_shape != 6)
+		//TODO: have to change line between ¡°show_nextshape()¡± and ¡°if(block->shpe == next_shape¡¦)¡± because as the shape may change after you have already printed the next one on the screen, the next one may appear different from the next one on the screen.
+		if (block->shape == next_shape && next_shape != 6)	//Make a variety of shapes.
 			next_shape += 1;
 	}
 }
