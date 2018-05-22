@@ -61,7 +61,6 @@ void input_block(BLOCK* block)
 		}
 	}
 }
-
 void Remove_Block(BLOCK* block)
 {
 	int x, y, shape, direction;
@@ -80,19 +79,22 @@ void Remove_Block(BLOCK* block)
 		}
 	}
 }
-
+/*
+Method to check down side of block
+if somthing in downside return 0
+*/
 int checkdown(BLOCK* block)
 {
 	int x, y, shape, direction;
-	int edge[4] = { 0,0,0,0 };
-
+	int edge[4] = { 0,0,0,0 };// use for marking edge
+							  //setting local variable from factor
 	shape = block->shape;
 	direction = block->direction;
 
 	for (x = 0; x < 4; x++) {
 		for (y = 3; y>0; y--) {
 			if (shapes[shape][direction][y][x] == 1) {
-				edge[x] = y;
+				edge[x] = y; //set fill edge num
 				break;
 			}
 		}
@@ -106,12 +108,15 @@ int checkdown(BLOCK* block)
 	}
 	return 1;
 }
-
+/*
+Method to check left side of block
+if somthing in leftside return 0
+*/
 int checkleft(BLOCK* block)
 {
 	int x, y, shape, direction;
-	int edge[4] = { -1,-1,-1,-1 };
-
+	int edge[4] = { -1,-1,-1,-1 };// use for marking edge
+								  //setting local variable from factor
 	shape = block->shape;
 	direction = block->direction;
 
@@ -119,7 +124,7 @@ int checkleft(BLOCK* block)
 		for (x = 0; x < 4; x++) {
 			if (shapes[shape][direction][y][x] == 1)
 			{
-				edge[y] = x;
+				edge[y] = x; //set fill edge num
 				break;
 			}
 
@@ -135,12 +140,15 @@ int checkleft(BLOCK* block)
 	}
 	return 1;
 }
-
+/*
+Method to check right side of block
+if somthing in rightside return 0
+*/
 int checkright(BLOCK* block)
 {
 	int x, y, shape, direction;
-	int edge[4] = { -1,-1,-1,-1 };
-
+	int edge[4] = { -1,-1,-1,-1 }; // use for marking edge
+								   //setting local variable from factor
 	shape = block->shape;
 	direction = block->direction;
 
@@ -148,7 +156,7 @@ int checkright(BLOCK* block)
 		for (x = 3; x >0; x--) {
 			if (shapes[shape][direction][y][x] == 1)
 			{
-				edge[y] = x;
+				edge[y] = x; //set fill edge num
 				break;
 			}
 
@@ -170,16 +178,16 @@ int checkshape(BLOCK* block)
 {
 	int x, y, shape, direction, next_direction;
 	int i, flag, plus_y = 0, plus_x = 0;
-	int Next_shape[4][4] = { 0 };
+	int Next_shape[4][4] = { 0 }; // all thing set 0
 	int edge[4] = { -1, -1, -1, -1 };
-
+	//setting local variable from factor
 	shape = block->shape;
 	direction = block->direction;
 	next_direction = block->direction + 1;
-
+	//limit direction number 3
 	next_direction %= 4;
 
-	//current-shape - next_shape
+	//current_shape -> next_shape  scan (4*4)
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
 			if (shapes[shape][direction][y][x] != 1) {
@@ -193,7 +201,10 @@ int checkshape(BLOCK* block)
 		//make edge by flag
 		switch (flag)
 		{
-		case 0:
+		case 0://left 
+			   /*
+			   TODO: if x<3 -> do not rotate
+			   */
 			for (y = 0; y < 4; y++) {
 				for (x = 0; x < 4; x++) {
 					if (Next_shape[y][x] == 1)
@@ -205,7 +216,7 @@ int checkshape(BLOCK* block)
 			}
 			break;
 
-		case 1:
+		case 1://right
 			for (y = 0; y < 4; y++) {
 				for (x = 3; x >0; x--) {
 					if (Next_shape[y][x] == 1)
@@ -218,7 +229,7 @@ int checkshape(BLOCK* block)
 			}
 			break;
 
-		case 2:
+		case 2://down
 			for (x = 0; x < 4; x++) {
 				for (y = 3; y>0; y--) {
 					if (Next_shape[y][x] == 1) {
@@ -228,7 +239,7 @@ int checkshape(BLOCK* block)
 				}
 			}
 			break;
-		case 3:
+		case 3://up
 			for (x = 0; x < 4; x++) {
 				for (y = 0; y<4; y++) {
 					if (Next_shape[y][x] == 1) {
@@ -243,7 +254,7 @@ int checkshape(BLOCK* block)
 
 		//check edge by flag
 		for (i = 0; i < 4; i++) {
-			if (edge != 0)
+			if (edge[i] != 0)
 			{
 				if (i < 2) {
 					if (screen[block->block_y + i][block->block_x + edge[i]] == 1)
@@ -257,25 +268,25 @@ int checkshape(BLOCK* block)
 		}
 		//clear edge
 		for (i = 0; i < 4; i++) {
-			edge[i] = -1;
+			edge[i] = -1; //reset
 		}
 	}
 	return 1;
 }
-
+//Method to control block according to the movement keys pressed
 void control_shape(BLOCK* block)
 {
-	char key;
+	char key; // user pressed key
 
 	while (_kbhit()) {
 		key = _getch();
 
 		switch (key)
 		{
-		case UP:
+		case UP://rotate block
 			if (checkshape(block) == 1) {
 				block->direction++;
-				block->direction %= 4;
+				block->direction %= 4; // limit rotate
 			}
 			break;
 
@@ -318,7 +329,6 @@ int Check_Over(void)
 	}
 	return 0;
 }
-
 void run_game(BLOCK* block)
 {
 	int i = 0, line;
