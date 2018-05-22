@@ -11,7 +11,7 @@ Returns an integer that determines one of the seven shapes of the block.
 int make_randint(int limit)
 {
 	srand((unsigned)time(NULL));
-	return rand() % limit; //returns random number below the limit; //todo: should not restore the formula immediately.
+	return rand() % limit;		//returns random number below the limit; //todo: should not restore the formula immediately.
 }
 
 BLOCK* first_block(void)
@@ -21,14 +21,17 @@ BLOCK* first_block(void)
 	block = (BLOCK*)malloc(sizeof(BLOCK));
 
 	//state == 0 is touched base 1 is falling
-	block->shape = make_randint(7);
-	block->block_x = 5;
-	block->block_y = 0;
-	block->direction = 0;
+	block->shape = make_randint(7);		//Store a random number below 7 in block -> shape.
+	block->block_x = 5;		//todo: Use a constant
+	block->block_y = 0; // Specify where the block will occur. //todo: Use a constant
+	block->direction = 0; // Specify the rotating state of the block.//todo: Use a constant
 
 	return block;
 }
-
+/*
+Method of making and returning new blocks.
+Return a block that will appear next while the game is running
+*/
 BLOCK* make_block(BLOCK* pre)
 {
 	BLOCK* block;
@@ -36,47 +39,53 @@ BLOCK* make_block(BLOCK* pre)
 	block = (BLOCK*)malloc(sizeof(BLOCK));
 
 	//state == 0 is touched base 1 is falling
-	block->shape = next_shape;
-	next_shape = rand() % 7;
-	block->block_x = 5;
-	block->block_y = 0;
-	block->direction = 0;
-
-	//eliminate before block
-	free(pre);
+	block->shape = next_shape; //Save the next_shape value in block - > shape.
+	next_shape = rand() % 7; //Save the new random number below 7 in the next-shape.
+	block->block_x = 5; //todo: Use a constant
+	block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
+	block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+	free(pre); //eliminate the previous block
 
 	return block;
 }
-
+/*
+Method to change the part of the screen array where the block exists to 1.
+*/
 void input_block(BLOCK* block)
 {
-	int x, y, shape, direction;
+	int x, y, shape, direction;	//todo: Each variable is declared in one row
 
 	shape = block->shape;
-	direction = block->direction;
+	direction = block->direction;	//Save the block's state in each x, y, shape, direction.
 
-	//shape's fill part to move screen
-	for (y = 0; y < 4; y++) {
+	//update the screen array
+	for (y = 0; y < 4; y++) {	//If the block exists,(if the value is 1)
 		for (x = 0; x < 4; x++) {
 			if (shapes[shape][direction][y][x] == 1) {
-				screen[block->block_y + y][block->block_x + x] = 1;
+				screen[block->block_y + y][block->block_x + x] = 1;//Store 1 in the corresponding location on the screen array.
+				//block_x, block_y is the current location of the block
 			}
 		}
 	}
 }
-void Remove_Block(BLOCK* block)
+/*
+Method to change the part of the screen array where the block exists to 0.
+*/
+void Remove_Block(BLOCK* block)		//todo: Replace the first letter with a lowercase letter
 {
-	int x, y, shape, direction;
+	int x, y, shape, direction;		//todo: Each variable is declared in one row
 
 	shape = block->shape;
-	direction = block->direction;
+	direction = block->direction;	//Save the block's state in each x, y, shape,
 
 	if (checkdown(block) != 0)
 	{
+		//update the screen array
 		for (y = 0; y < 4; y++) {
 			for (x = 0; x < 4; x++) {
-				if (shapes[shape][direction][y][x] == 1) {
-					screen[block->block_y + y][block->block_x + x] = 0;
+				if (shapes[shape][direction][y][x] == 1) {	//If the block exists,(if the value is 1)	
+					screen[block->block_y + y][block->block_x + x] = 0;		//Store 0 in the corresponding location on the screen array.
+					//block_x, block_y is the current location of the block
 				}
 			}
 		}
