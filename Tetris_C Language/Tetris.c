@@ -4,14 +4,11 @@
 #include "show.h"
 
 
-/*
-Method to make random int from 0 to limit-1
-Returns an integer that determines one of the seven shapes of the block.
-*/
+//make random int from 0~limit-1 
 int make_randint(int limit)
 {
 	srand((unsigned)time(NULL));
-	return rand() % limit;		//returns random number below the limit; //todo: should not restore the formula immediately.
+	return rand() % limit;
 }
 
 BLOCK* first_block(void)
@@ -21,17 +18,14 @@ BLOCK* first_block(void)
 	block = (BLOCK*)malloc(sizeof(BLOCK));
 
 	//state == 0 is touched base 1 is falling
-	block->shape = make_randint(7);		//Store a random number below 7 in block -> shape.
-	block->block_x = 5;		//todo: Use a constant
-	block->block_y = 0; // Specify where the block will occur. //todo: Use a constant
-	block->direction = 0; // Specify the rotating state of the block.//todo: Use a constant
+	block->shape = make_randint(7);
+	block->block_x = 5;
+	block->block_y = 0;
+	block->direction = 0;
 
 	return block;
 }
-/*
-Method of making and returning new blocks.
-Return a block that will appear next while the game is running
-*/
+
 BLOCK* make_block(BLOCK* pre)
 {
 	BLOCK* block;
@@ -39,53 +33,47 @@ BLOCK* make_block(BLOCK* pre)
 	block = (BLOCK*)malloc(sizeof(BLOCK));
 
 	//state == 0 is touched base 1 is falling
-	block->shape = next_shape; //Save the next_shape value in block - > shape.
-	next_shape = rand() % 7; //Save the new random number below 7 in the next-shape.
-	block->block_x = 5; //todo: Use a constant
-	block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
-	block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
-	free(pre); //eliminate the previous block
+	block->shape = next_shape;
+	next_shape = rand() % 7;
+	block->block_x = 5;
+	block->block_y = 0;
+	block->direction = 0;
+
+	//eliminate before block
+	free(pre);
 
 	return block;
 }
-/*
-Method to change the part of the screen array where the block exists to 1.
-*/
+
 void input_block(BLOCK* block)
 {
-	int x, y, shape, direction;	//todo: Each variable is declared in one row
+	int x, y, shape, direction;
 
 	shape = block->shape;
-	direction = block->direction;	//Save the block's state in each x, y, shape, direction.
+	direction = block->direction;
 
-	//update the screen array
-	for (y = 0; y < 4; y++) {	//If the block exists,(if the value is 1)
+	//shape's fill part to move screen
+	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
 			if (shapes[shape][direction][y][x] == 1) {
-				screen[block->block_y + y][block->block_x + x] = 1;//Store 1 in the corresponding location on the screen array.
-				//block_x, block_y is the current location of the block
+				screen[block->block_y + y][block->block_x + x] = 1;
 			}
 		}
 	}
 }
-/*
-Method to change the part of the screen array where the block exists to 0.
-*/
-void Remove_Block(BLOCK* block)		//todo: Replace the first letter with a lowercase letter
+void Remove_Block(BLOCK* block)
 {
-	int x, y, shape, direction;		//todo: Each variable is declared in one row
+	int x, y, shape, direction;
 
 	shape = block->shape;
-	direction = block->direction;	//Save the block's state in each x, y, shape,
+	direction = block->direction;
 
 	if (checkdown(block) != 0)
 	{
-		//update the screen array
 		for (y = 0; y < 4; y++) {
 			for (x = 0; x < 4; x++) {
-				if (shapes[shape][direction][y][x] == 1) {	//If the block exists,(if the value is 1)	
-					screen[block->block_y + y][block->block_x + x] = 0;		//Store 0 in the corresponding location on the screen array.
-					//block_x, block_y is the current location of the block
+				if (shapes[shape][direction][y][x] == 1) {
+					screen[block->block_y + y][block->block_x + x] = 0;
 				}
 			}
 		}
@@ -285,16 +273,12 @@ int checkshape(BLOCK* block)
 	}
 	return 1;
 }
-/*
-Method to make block destination for use screen[y][x]=2
-and show block detination
-*/
-void blockdestination(BLOCK *future) 
+void blockdestination(BLOCK *future) // block destination
 {
 
 	int x, y, shape, direction;
 
-	while (checkdown(future)) // blcok down while screen[y][x]=1
+	while (checkdown(future))
 		future->block_y++;
 
 	shape = future->shape;
@@ -314,6 +298,7 @@ void blockdestination(BLOCK *future)
 void control_shape(BLOCK* block)
 {
 	char key; // user pressed key
+
 
 	while (_kbhit()) {
 		key = _getch();
@@ -366,9 +351,6 @@ int Check_Over(void)
 	}
 	return 0;
 }
-/*
-Method to set future block for set dstination
-*/
 void copyblock(BLOCK *block, BLOCK *copy)
 {
 	copy->block_y = 0;
@@ -376,45 +358,39 @@ void copyblock(BLOCK *block, BLOCK *copy)
 	copy->direction = block->direction;
 	copy->shape = block->shape;
 }
-/*
-Method to carry out the overall execution of tetris
-Function:	Move blocks down, Change the block according to the keyboard input,
-Print the block, Remove the completed line, Check whether the game is over
-*/
 void run_game(BLOCK* block)
 {
-	int i = 0, line; //Initializing for Repetition
-	int x, y; // scan map
-	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK)); // make future block
-	
-	remove_cursor(); //remove cursor on screen
+	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
+	int i = 0, line;
+	int x, y;
+	remove_cursor();
 
-	show_nextshape(); //print the next block
+	show_nextshape();
 
-	while (1) { //the loop ends when the game is over
-		while (1) { //the loop ends when the block is collide bottom
+	while (1) {
+		while (1) {
 			//to move block fast
 			i++;
 			if (i == 3) {
 				i = 0;
-				block->block_y++;	//if (i==3) move block one down
+				block->block_y++;
 			}
-			copyblock(block, future); // set future block
-			blockdestination(future); //make destination
-			control_shape(block);	// If there is a keyboard input, change the shape of the block.
-			
-			input_block(block);		//Fill the screen array with blocks.
-			
-			show_screen();		//print screen
+			copyblock(block, future);
+			blockdestination(future);
+			control_shape(block);
+			//fill that block to array
+			input_block(block);
+
+			//print screen
+			show_screen();
 			//change place(side) and direction
-			
 
 			//if next place(down) is filled break while and make new block
 			if (checkdown(block) == 0)
 				break;
 			//remove current block
 			Remove_Block(block);
-			for (y = 0; y < SCREEN_HEIGHT; y++) // remove pre dstination
+			for (y = 0; y < SCREEN_HEIGHT; y++)
 			{
 				for (x = 0; x < SCREEN_WIDTH; x++)
 				{
@@ -422,26 +398,27 @@ void run_game(BLOCK* block)
 						screen[y][x] = 0;
 				}
 			}
-			Sleep(100);		//Do nothing for 0.1 seconds.
+			Sleep(100);
+		}
 		while (1)
 		{
-			line = Clear_Line();	/*Check how many lines are cleared, and then insert the value into the line variable. */
-			if (line == 0)	// If there are no lines to erase, break.
+			line = Clear_Line();
+			if (line == 0)
 				break;
-			Shift_Screen(line);	//Erase the line and print out the screen.
+			Shift_Screen(line);
 		}
 
-		if (Check_Over())	//Check to see if the game is over.
+		if (Check_Over())
 			break;
 
 		//make new block
 		block = make_block(block);
-		next_shape = make_randint(7);	//make random integer 0~6
+		next_shape = make_randint(7);
 
 		remove_cursor();
 		show_nextshape();
-		//TODO: have to change line between ¡°show_nextshape()¡± and ¡°if(block->shpe == next_shape¡¦)¡± because as the shape may change after you have already printed the next one on the screen, the next one may appear different from the next one on the screen.
-		if (block->shape == next_shape && next_shape != 6)	//Make a variety of shapes.
+
+		if (block->shape == next_shape && next_shape != 6)
 			next_shape += 1;
 	}
 }
