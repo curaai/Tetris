@@ -52,11 +52,20 @@ void input_block(BLOCK* block)
 	shape = block->shape;
 	direction = block->direction;
 
+<<<<<<< HEAD
+									//update the screen array
+	for (y = 0; y < 4; y++) {	//If the block exists,(if the value is 1)
+		for (x = 0; x < 4; x++) {
+			if (shapes[shape][direction][y][x] == 1) {
+				screen[block->block_y + y][block->block_x + x] = 1;//Store 1 in the corresponding location on the screen array.
+																   //block_x, block_y is the current location of the block
+=======
 	//shape's fill part to move screen
 	for (y = 0; y < 4; y++) {
 		for (x = 0; x < 4; x++) {
 			if (shapes[shape][direction][y][x] == 1) {
 				screen[block->block_y + y][block->block_x + x] = 1;
+>>>>>>> master
 			}
 		}
 	}
@@ -72,8 +81,14 @@ void Remove_Block(BLOCK* block)
 	{
 		for (y = 0; y < 4; y++) {
 			for (x = 0; x < 4; x++) {
+<<<<<<< HEAD
+				if (shapes[shape][direction][y][x] == 1) {	//If the block exists,(if the value is 1)	
+					screen[block->block_y + y][block->block_x + x] = 0;		//Store 0 in the corresponding location on the screen array.
+																			//block_x, block_y is the current location of the block
+=======
 				if (shapes[shape][direction][y][x] == 1) {
 					screen[block->block_y + y][block->block_x + x] = 0;
+>>>>>>> master
 				}
 			}
 		}
@@ -273,7 +288,15 @@ int checkshape(BLOCK* block)
 	}
 	return 1;
 }
+<<<<<<< HEAD
+/*
+Method to make block destination for use screen[y][x]=2
+and show block detination
+*/
+void blockdestination(BLOCK *future)
+=======
 void blockdestination(BLOCK *future) // block destination
+>>>>>>> master
 {
 
 	int x, y, shape, direction;
@@ -360,21 +383,44 @@ void copyblock(BLOCK *block, BLOCK *copy)
 }
 void run_game(BLOCK* block)
 {
+<<<<<<< HEAD
+	int i = 0, line; //Initializing for Repetition
+	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
+	int x, y;
+	remove_cursor(); //remove cursor on screen
+=======
 	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
 	int i = 0, line;
 	int x, y;
 	remove_cursor();
+>>>>>>> master
 
 	show_nextshape();
 
+<<<<<<< HEAD
+	while (1) { //the loop ends when the game is over
+		while (1) { //the loop ends when the block is collide bottom
+					//to move block fast
+=======
 	while (1) {
 		while (1) {
 			//to move block fast
+>>>>>>> master
 			i++;
 			if (i == 3) {
 				i = 0;
 				block->block_y++;
 			}
+<<<<<<< HEAD
+			copyblock(block, future); // set future block
+			blockdestination(future); //make destination
+			control_shape(block);	// If there is a keyboard input, change the shape of the block.
+
+			input_block(block);		//Fill the screen array with blocks.
+
+			show_screen();		//print screen
+								//change place(side) and direction
+=======
 			copyblock(block, future);
 			blockdestination(future);
 			control_shape(block);
@@ -384,8 +430,10 @@ void run_game(BLOCK* block)
 			//print screen
 			show_screen();
 			//change place(side) and direction
+>>>>>>> master
 
-			//if next place(down) is filled break while and make new block
+
+								//if next place(down) is filled break while and make new block
 			if (checkdown(block) == 0)
 				break;
 			//remove current block
@@ -398,7 +446,11 @@ void run_game(BLOCK* block)
 						screen[y][x] = 0;
 				}
 			}
+<<<<<<< HEAD
+			Sleep(100);		//Do nothing for 0.1 seconds.
+=======
 			Sleep(100);
+>>>>>>> master
 		}
 		while (1)
 		{
@@ -420,5 +472,6 @@ void run_game(BLOCK* block)
 
 		if (block->shape == next_shape && next_shape != 6)
 			next_shape += 1;
+
 	}
 }
