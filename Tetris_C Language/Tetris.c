@@ -345,7 +345,7 @@ int Check_Over(void)
 		{
 			system("cls");
 			set_cursor(30, 10);
-			printf("ÂìÂì ·çÀú»õ³¢");
+			printf("YOU LOSE!");
 			return 1;
 		}
 	}
