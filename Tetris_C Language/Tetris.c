@@ -384,7 +384,9 @@ Print the block, Remove the completed line, Check whether the game is over
 void run_game(BLOCK* block)
 {
 	int i = 0, line; //Initializing for Repetition
-
+	int x, y; // scan map
+	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK)); // make future block
+	
 	remove_cursor(); //remove cursor on screen
 
 	show_nextshape(); //print the next block
