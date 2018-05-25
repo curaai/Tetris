@@ -439,10 +439,11 @@ void run_game(BLOCK* block)
 		next_shape = make_randint(7);	//make random integer 0~6
 
 		remove_cursor();
-		show_nextshape();
-		//TODO: have to change line between ¡°show_nextshape()¡± and ¡°if(block->shpe == next_shape¡¦)¡± because as the shape may change after you have already printed the next one on the screen, the next one may appear different from the next one on the screen.
+
+
 		if (block->shape == next_shape && next_shape != 6)	//Make a variety of shapes.
 			next_shape += 1;
-
+		
+		show_nextshape();
 	}
 }
