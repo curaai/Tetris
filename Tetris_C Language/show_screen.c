@@ -1,4 +1,4 @@
-#include "show.h"	
+#include "show.h"   
 #include "library.h"
 #include "tetris_function.h"
 #include "shapes.h"
@@ -80,6 +80,7 @@ int Clear_Line(void)
 		{
 			count = 0; // reset count
 			for (x = 1; x < SCREEN_WIDTH - 1; x++) {
+
 				if (screen[y][x] == 1) {
 					count += 1; //count to block (1*1)
 				}
@@ -134,9 +135,9 @@ int Intro(void)
 	set_cursor(20, 8);
 	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥﹥﹥﹥       ﹥     ﹥﹥﹥﹥﹥");
 	set_cursor(20, 9);
-	puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥		    ﹥");
+	puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥          ﹥");
 	set_cursor(20, 10);
-	puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥		    ﹥");
+	puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥          ﹥");
 	set_cursor(20, 11);
 	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥      ﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
 	set_cursor(20, 14);
@@ -148,18 +149,18 @@ int Intro(void)
 	set_cursor(20, 17);
 	printf("3.AI");
 	userkey = _getch();// step for game start
-				// we need for select mode
+					   // we need for select mode
 	switch (userkey)
 	{
-		case 49:
-			mode= 1;
-			break;
-		case 50:
-			mode= 2;
-			break;
-		case 51:
-			mode= 3;
-			break;
+	case 49:
+		mode = 1;
+		break;
+	case 50:
+		mode = 2;
+		break;
+	case 51:
+		mode = 3;
+		break;
 	}
 	return mode;
 }
@@ -206,9 +207,9 @@ void show_score(int score)
 	//draw next blcok
 	for (i = 0; i < 1; i++) {
 		// left side cast
-		if(i==0)
+		if (i == 0)
 		{
-			set_cursor(47,12+i);
+			set_cursor(47, 12 + i);
 			printf("%d", score);
 		}
 		set_cursor(45, 12 + i);
@@ -217,7 +218,7 @@ void show_score(int score)
 		//right side cast
 		puts("弛");
 	}
-	
+
 	set_cursor(45, 13);
 	puts("戌式式式式式式式式式戎");
 }

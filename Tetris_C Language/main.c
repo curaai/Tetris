@@ -8,13 +8,13 @@ int main(void)
 	BLOCK* block;
 
 
-	if (Intro()==1) // origin mode
+	if (Intro() == 1) // origin mode
 	{
 		system("cls");
 		block = first_block(); //make first block
 		fill_screen();// make the tetris map
 		show_screen();// make all thing 
-					  
+
 		run_game(block);// run the game
 	}
 	else if (Intro() == 2) // using Item mode
@@ -24,7 +24,7 @@ int main(void)
 		fill_screen();// make the tetris map
 		show_screen();// make all thing 
 
-		run_game(block);// run the game
+		run_itemgame(block);// run the game
 	}
 	else if (Intro() == 3) // show AI mode
 	{
