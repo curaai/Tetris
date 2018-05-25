@@ -17,7 +17,7 @@ int main(void)
 					  
 		run_game(block);// run the game
 	}
-	if (Intro() == 2) // using Item mode
+	else if (Intro() == 2) // using Item mode
 	{
 		system("cls");
 		block = first_block(); //make first block
@@ -26,7 +26,7 @@ int main(void)
 
 		run_game(block);// run the game
 	}
-	if (Intro() == 3) // show AI mode
+	else if (Intro() == 3) // show AI mode
 	{
 		system("cls");
 		block = first_block(); //make first block
