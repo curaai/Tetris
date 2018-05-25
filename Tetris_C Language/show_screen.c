@@ -1,4 +1,4 @@
-#include "show.h"	
+#include "show.h"   
 #include "library.h"
 #include "tetris_function.h"
 #include "shapes.h"
@@ -42,7 +42,11 @@ void show_screen(void)
 		set_cursor(5, 2 + i);
 
 		for (j = 0; j < SCREEN_WIDTH; j++) {
-			if (screen[i][j] == 1)
+			if (screen[i][j] == 2) // block destination
+			{
+				printf("﹤");
+			}
+			else if (screen[i][j] == 1)
 			{
 				if (j == SCREEN_LEFT_EDGE && i == SCREEN_DOWN_EDGE)
 					printf("〧");  //map
@@ -76,6 +80,7 @@ int Clear_Line(void)
 		{
 			count = 0; // reset count
 			for (x = 1; x < SCREEN_WIDTH - 1; x++) {
+
 				if (screen[y][x] == 1) {
 					count += 1; //count to block (1*1)
 				}
@@ -119,9 +124,8 @@ int Check_line(int line)
 //Intro, Game Start
 int Intro(void)
 {
-	char start[10] = { 0 };// for user key pressed
-	char compare[10] = "start"; // for checking to start
-
+	int mode; // select mode
+	int userkey;// user pressd
 	set_cursor(20, 5);
 	puts("﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥   ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
 	set_cursor(20, 6);
@@ -131,20 +135,34 @@ int Intro(void)
 	set_cursor(20, 8);
 	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥﹥﹥﹥       ﹥     ﹥﹥﹥﹥﹥");
 	set_cursor(20, 9);
-	puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥		    ﹥");
+	puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥          ﹥");
 	set_cursor(20, 10);
-	puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥		    ﹥");
+	puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥          ﹥");
 	set_cursor(20, 11);
 	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥      ﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
-
 	set_cursor(20, 14);
-	printf("If you want to start game input \"start\" : ");
-	gets(start);// step for game start
-				// we need for select mode
-	if (!strcmp(start, compare))
-		return 1;
-	else
-		return 0;
+	printf("CHOOSE GAME MODE");
+	set_cursor(20, 15);
+	printf("1.Classic");
+	set_cursor(20, 16);
+	printf("2.Item");
+	set_cursor(20, 17);
+	printf("3.AI");
+	userkey = _getch();// step for game start
+					   // we need for select mode
+	switch (userkey)
+	{
+	case 49:
+		mode = 1;
+		break;
+	case 50:
+		mode = 2;
+		break;
+	case 51:
+		mode = 3;
+		break;
+	}
+	return mode;
 }
 
 //show next shape
@@ -176,4 +194,31 @@ void show_nextshape(void)
 	}
 	set_cursor(45, 8);
 	puts("﹤﹤﹤﹤﹤﹤");
+}
+
+void show_score(int score)
+{
+	int i, j;
+	set_cursor(45, 10);
+	puts("GAME SCORE");
+
+	set_cursor(45, 11);
+	puts("忙式式式式式式式式式忖");
+	//draw next blcok
+	for (i = 0; i < 1; i++) {
+		// left side cast
+		if (i == 0)
+		{
+			set_cursor(47, 12 + i);
+			printf("%d", score);
+		}
+		set_cursor(45, 12 + i);
+		printf("弛");
+		set_cursor(55, 12 + i);
+		//right side cast
+		puts("弛");
+	}
+
+	set_cursor(45, 13);
+	puts("戌式式式式式式式式式戎");
 }
