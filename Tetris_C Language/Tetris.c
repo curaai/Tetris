@@ -384,12 +384,13 @@ Print the block, Remove the completed line, Check whether the game is over
 void run_game(BLOCK* block)
 {
 	int i = 0, line; //Initializing for Repetition
+	int score = 0; // game score
 	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
 	int x, y;
 	remove_cursor(); //remove cursor on screen
 
 	show_nextshape(); //print the next block
-
+	show_score(score); // print game score
 	while (1) { //the loop ends when the game is over
 		while (1) { //the loop ends when the block is collide bottom
 					//to move block fast
@@ -405,6 +406,7 @@ void run_game(BLOCK* block)
 			input_block(block);		//Fill the screen array with blocks.
 
 			show_screen();		//print screen
+			show_score(score); // print game score
 								//change place(side) and direction
 
 
@@ -429,6 +431,7 @@ void run_game(BLOCK* block)
 			if (line == 0)	// If there are no lines to erase, break.
 				break;
 			Shift_Screen(line);	//Erase the line and print out the screen.
+			score = score + 10 * 12;
 		}
 
 		if (Check_Over())	//Check to see if the game is over.

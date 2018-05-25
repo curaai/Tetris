@@ -123,9 +123,8 @@ int Check_line(int line)
 //Intro, Game Start
 int Intro(void)
 {
-	char start[10] = { 0 };// for user key pressed
-	char compare[10] = "start"; // for checking to start
-	int userkey;
+	int mode; // select mode
+	int userkey;// user pressd
 	set_cursor(20, 5);
 	puts("﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥   ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
 	set_cursor(20, 6);
@@ -152,16 +151,17 @@ int Intro(void)
 				// we need for select mode
 	switch (userkey)
 	{
-	case 49:
-		return 1;
-		break;
-	case 50:
-		return 2;
-		break;
-	case 51:
-		return 3;
-		break;
+		case 49:
+			mode= 1;
+			break;
+		case 50:
+			mode= 2;
+			break;
+		case 51:
+			mode= 3;
+			break;
 	}
+	return mode;
 }
 
 //show next shape
@@ -193,4 +193,31 @@ void show_nextshape(void)
 	}
 	set_cursor(45, 8);
 	puts("﹤﹤﹤﹤﹤﹤");
+}
+
+void show_score(int score)
+{
+	int i, j;
+	set_cursor(45, 10);
+	puts("GAME SCORE");
+
+	set_cursor(45, 11);
+	puts("忙式式式式式式式式式忖");
+	//draw next blcok
+	for (i = 0; i < 1; i++) {
+		// left side cast
+		if(i==0)
+		{
+			set_cursor(47,12+i);
+			printf("%d", score);
+		}
+		set_cursor(45, 12 + i);
+		printf("弛");
+		set_cursor(55, 12 + i);
+		//right side cast
+		puts("弛");
+	}
+	
+	set_cursor(45, 13);
+	puts("戌式式式式式式式式式戎");
 }
