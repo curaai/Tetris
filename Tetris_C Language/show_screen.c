@@ -125,7 +125,7 @@ int Intro(void)
 {
 	char start[10] = { 0 };// for user key pressed
 	char compare[10] = "start"; // for checking to start
-
+	int userkey;
 	set_cursor(20, 5);
 	puts("¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á ¡á¡á¡á¡á   ¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á");
 	set_cursor(20, 6);
@@ -140,15 +140,28 @@ int Intro(void)
 	puts("    ¡á     ¡á             ¡á     ¡á    ¡á       ¡á		    ¡á");
 	set_cursor(20, 11);
 	puts("    ¡á     ¡á¡á¡á¡á¡á     ¡á     ¡á      ¡á ¡á¡á¡á¡á¡á ¡á¡á¡á¡á¡á");
-
 	set_cursor(20, 14);
-	printf("If you want to start game input \"start\" : ");
-	gets(start);// step for game start
+	printf("CHOOSE GAME MODE");
+	set_cursor(20, 15);
+	printf("1.Classic");
+	set_cursor(20, 16);
+	printf("2.Item");
+	set_cursor(20, 17);
+	printf("3.AI");
+	userkey = _getch();// step for game start
 				// we need for select mode
-	if (!strcmp(start, compare))
+	switch (userkey)
+	{
+	case 49:
 		return 1;
-	else
-		return 0;
+		break;
+	case 50:
+		return 2;
+		break;
+	case 51:
+		return 3;
+		break;
+	}
 }
 
 //show next shape
