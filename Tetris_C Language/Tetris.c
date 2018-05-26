@@ -553,7 +553,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			input_block(block);      //Fill the screen array with blocks.
 
 			show_screen();      //print screen
-			//show_score(score); // print game score
+			show_score(score); // print game score
 							   //change place(side) and direction
 
 
