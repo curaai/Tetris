@@ -6,9 +6,9 @@
 int main(void)
 {
 	BLOCK* block;
+	int mode = Intro();
 
-
-	if (Intro() == 1) // origin mode
+	if (mode == 1) // origin mode
 	{
 		system("cls");
 		block = first_block(); //make first block
@@ -17,7 +17,7 @@ int main(void)
 
 		run_game(block);// run the game
 	}
-	else if (Intro() == 2) // using Item mode
+	else if (mode == 2) // using Item mode
 	{
 		system("cls");
 		block = first_block(); //make first block
@@ -26,7 +26,7 @@ int main(void)
 
 		run_itemgame(block);// run the game
 	}
-	else if (Intro() == 3) // show AI mode
+	else if (mode == 3) // show AI mode
 	{
 		system("cls");
 		block = first_block(); //make first block
