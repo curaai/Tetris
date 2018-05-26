@@ -166,6 +166,7 @@ int Intro(void)
 }
 
 //show next shape
+//show next shape
 void show_nextshape(void)
 {
 	int i, j;
@@ -174,51 +175,78 @@ void show_nextshape(void)
 	puts("Next Shape");
 
 	set_cursor(45, 3);
-	puts("﹤﹤﹤﹤﹤﹤");
+	puts("﹤﹤﹤﹤﹤﹤﹤﹤");
 	//draw next blcok
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 6; i++) {
 		// left side cast
 		set_cursor(45, 4 + i);
 		printf("﹤");
-
-		for (j = 0; j < 4; j++) {
+		//right side cast
+		set_cursor(59, 4 + i);
+		puts("﹤");
+	}
+	set_cursor(45, 10);
+	puts("﹤﹤﹤﹤﹤﹤﹤﹤");
+	set_cursor(49, 5);
+	for (i = 0; i < 4; i++)
+	{
+		set_cursor(49, 5 + i);
+		for (j = 0; j < 4; j++)
+		{
 			if (shapes[next_shape][0][i][j] == 1)
-				printf("﹤");
+				printf("﹥");
+			else if (shapes[next_shape][0][i][j] == 3)
+				printf("㏒");
 			else
 				printf("  ");
-
 		}
-		//right side cast
-		puts("﹤");
-
 	}
-	set_cursor(45, 8);
-	puts("﹤﹤﹤﹤﹤﹤");
 }
 
 void show_score(int score)
 {
 	int i, j;
-	set_cursor(45, 10);
+	int ten_count = 0; // score 10 size
+	int size = 0; // for change weight score map size
+	set_cursor(45, 12);
 	puts("GAME SCORE");
-
-	set_cursor(45, 11);
-	puts("忙式式式式式式式式式忖");
-	//draw next blcok
 	for (i = 0; i < 1; i++) {
 		// left side cast
 		if (i == 0)
 		{
-			set_cursor(47, 12 + i);
+			set_cursor(46, 14 + i);
 			printf("%d", score);
 		}
-		set_cursor(45, 12 + i);
+		set_cursor(44, 14 + i);
 		printf("弛");
-		set_cursor(55, 12 + i);
+		while (score > 0)
+		{
+			score = score / 10;
+			ten_count++;
+		}
+		if (ten_count > 8)
+		{
+			size = (ten_count - 8);
+		}
+		set_cursor(54 + size, 14 + i);
 		//right side cast
 		puts("弛");
+		ten_count = 0;
 	}
-
-	set_cursor(45, 13);
-	puts("戌式式式式式式式式式戎");
+	set_cursor(44, 13);
+	puts("忙式式式式式式式式式");
+	for (i = 1; i < 2 + size; i++)
+	{
+		set_cursor(52 + i, 13);
+		printf("式");
+	}
+	printf("忖");
+	set_cursor(44, 15);
+	puts("戌式式式式式式式式式");
+	for (i = 1; i < 2 + size; i++)
+	{
+		set_cursor(52 + i, 15);
+		printf("式");
+	}
+	printf("戎");
 }
