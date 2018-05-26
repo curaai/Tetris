@@ -553,7 +553,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			input_block(block);      //Fill the screen array with blocks.
 
 			show_screen();      //print screen
-			show_score(score); // print game score
+			//show_score(score); // print game score
 							   //change place(side) and direction
 
 
@@ -597,18 +597,21 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			else
 			{
 				itemcnt++;
+				
 			}
+			Shift_Screen(line);   //Erase the line and print out the screen.
+				score = score + 10 * 12;
+			
 			if (itemcnt == 2)
 			{
 				bombsignal = 1;
 			}
 			else if (itemcnt >= 3)
 			{
+				bombsignal = 0;
 				erasesignal = 1;
 			}
-			Shift_Screen(line);   //Erase the line and print out the screen.
-
-			score = score + 10 * 12;
+			
 		}
 
 		if (Check_Over())   //Check to see if the game is over.
@@ -622,10 +625,12 @@ void run_itemgame(BLOCK* block) // ITEM mode
 		}
 		else if (bombsignal == 1 && erasesignal == 0) // make bombitem
 		{
+			set_cursor(5, 0);
 			block = bombitem(block);
 		}
 		else if (bombsignal == 0 && erasesignal == 1) // make bombitem
 		{
+			set_cursor(5, 0);
 			block = eraseitem(block);
 		}
 		remove_cursor();
