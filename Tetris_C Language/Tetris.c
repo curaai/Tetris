@@ -272,8 +272,16 @@ int checkshape(BLOCK* block)
 			if (edge[i] != 0)
 			{
 				if (i < 2) {
-					if (screen[block->block_y + i][block->block_x + edge[i]] == 1)
-						return 0;
+					if (block->block_x > 2)
+					{
+						if (screen[block->block_y + i][block->block_x + edge[i]] == 1)
+							return 0;
+					}
+					else
+					{
+						if (screen[block->block_y + i][block->block_x + edge[i] + 2] == 1)
+							return 0;
+					}
 				}
 				else {
 					if (screen[block->block_y + edge[i]][block->block_x + i] == 1)
