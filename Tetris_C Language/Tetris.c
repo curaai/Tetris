@@ -4,7 +4,9 @@
 #include "show.h"
 int score = 0; // game score
 int bombsignal = 0; // signal of bombitem
+int erasesignal = 0; // signal of erase item
 int itemcnt = 0; //count for using item
+
 				 /*
 				 Method to make random int from 0 to limit-1
 				 Returns an integer that determines one of the seven shapes of the block.
@@ -451,7 +453,7 @@ void run_game(BLOCK* block)
 		show_nextshape();
 	}
 }
-BLOCK *bombitem()
+BLOCK *bombitem(BLOCK *pre)
 {
 	BLOCK* block;
 
@@ -463,7 +465,22 @@ BLOCK *bombitem()
 	block->block_x = 5; //todo: Use a constant
 	block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
 	block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+	free(pre);
+	return block;
+}
+BLOCK *eraseitem(BLOCK *pre)
+{
+	BLOCK* block;
 
+	block = (BLOCK*)malloc(sizeof(BLOCK));
+
+	//state == 0 is touched base 1 is falling
+	block->shape = 7; //Save the next_shape value in block - > shape.
+	next_shape = rand() % 7; //Save the new random number below 7 in the next-shape.
+	block->block_x = 5; //todo: Use a constant
+	block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
+	block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+	free(pre);
 	return block;
 }
 void effectbomb(BLOCK *bomb) // effect bomb item
@@ -495,6 +512,21 @@ void effectbomb(BLOCK *bomb) // effect bomb item
 			}
 		}
 	}
+}
+void effecterase(BLOCK *erase) //erase item
+{
+	int x, y;
+	for (y = erase->block_y + 1; y > 0; y--) {//check from down to up
+		for (x = 1; x < SCREEN_WIDTH - 1; x++)  //one line in the map
+		{
+			if (screen[y][x] == 1)
+			{
+				score = score + 10;
+				screen[y][x] = 0;
+			}
+		}
+	}
+	screen[erase->block_y + 2][erase->block_x + 2] = 0;
 }
 void run_itemgame(BLOCK* block) // ITEM mode 
 {
@@ -534,6 +566,12 @@ void run_itemgame(BLOCK* block) // ITEM mode
 					bombsignal = 0; // reset condition
 					break;
 				}
+				if (erasesignal == 1)
+				{
+					effecterase(block);
+					erasesignal = 0; //reset erasesignal condition
+					break;
+				}
 				break;
 			}
 			//remove current block
@@ -553,7 +591,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			line = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
 			if (line == 0)   // If there are no lines to erase, break.
 			{
-				itemcnt = 0;
+				itemcnt = 0; // reset item count after checking line over
 				break;
 			}
 			else
@@ -564,9 +602,9 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			{
 				bombsignal = 1;
 			}
-			else if (itemcnt == 3)
+			else if (itemcnt >= 3)
 			{
-
+				erasesignal = 1;
 			}
 			Shift_Screen(line);   //Erase the line and print out the screen.
 
@@ -577,14 +615,18 @@ void run_itemgame(BLOCK* block) // ITEM mode
 			break;
 
 		//make new block
-		if (bombsignal == 0) // no bombitem
+		if (bombsignal == 0 && erasesignal == 0) // no anyitem
 		{
 			block = make_block(block);
 			next_shape = make_randint(7);   //make random integer 0~6
 		}
-		else if (bombsignal == 1) // make bombitem
+		else if (bombsignal == 1 && erasesignal == 0) // make bombitem
 		{
-			block = bombitem();
+			block = bombitem(block);
+		}
+		else if (bombsignal == 0 && erasesignal == 1) // make bombitem
+		{
+			block = eraseitem(block);
 		}
 		remove_cursor();
 
