@@ -9,5 +9,5 @@ int Clear_Line(void);
 int Check_line(int line);
 void Shift_Screen(int y);
 void show_nextshape(void);
-
+int Intro(void);
 #endif // !_SHOW_H__
