@@ -11,6 +11,7 @@ int checkdown(BLOCK* block);
 void Remove_Block(BLOCK* block);
 void control_shape(BLOCK* block);
 void run_game(BLOCK* block);
+void run_itemgame(BLOCK* block);
 int checkleft(BLOCK* block);
 int checkright(BLOCK* block);
 int checkshape(BLOCK* block);
