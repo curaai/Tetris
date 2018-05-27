@@ -254,111 +254,137 @@ int checkright(BLOCK* block)
 //check the next shape place
 int checkshape(BLOCK* block)
 {
+   int x, y, shape, direction, next_direction;
+   int i, flag, plus_y = 0, plus_x = 0;
+   int Next_shape[4][4] = { 0 }; // all thing set 0
+   int edge[4] = { -1, -1, -1, -1 };
+   //setting local variable from factor
+   shape = block->shape;
+   direction = block->direction;
+   next_direction = block->direction + 1;
+   //limit direction number 3
+   next_direction %= 4;
 
-	int x, y, shape, direction, next_direction;
-	int i, flag, plus_y = 0, plus_x = 0;
-	int Next_shape[4][4] = { 0 }; // all thing set 0
-	int edge[4] = { -1, -1, -1, -1 };
-	//setting local variable from factor
-	shape = block->shape;
-	direction = block->direction;
-	next_direction = block->direction + 1;
-	//limit direction number 3
-	next_direction %= 4;
+   //current_shape -> next_shape  scan (4*4)
+   for (y = 0; y < 4; y++) {
+      for (x = 0; x < 4; x++) {
+         if (shapes[shape][direction][y][x] != 1) {
+            Next_shape[y][x] = shapes[shape][next_direction][y][x];
+         }
+         if (shapes[shape][direction][y][x] != 3) {
+            Next_shape[y][x] = shapes[shape][next_direction][y][x];
+         }
+      }
+   }
 
-	//current_shape -> next_shape  scan (4*4)
-	for (y = 0; y < 4; y++) {
-		for (x = 0; x < 4; x++) {
-			if (shapes[shape][direction][y][x] != 1) {
-				Next_shape[y][x] = shapes[shape][next_direction][y][x];
-			}
-		}
-	}
+   //0 is check left 1 is check right 2 is check down 3is check up
+   for (flag = 0; flag < 4; flag++) {
+      //make edge by flag
+      switch (flag)
+      {
+      case 0://left 
+            /*
+            TODO: if x<3 -> do not rotate
+            */
+         for (y = 0; y < 4; y++) {
+            for (x = 0; x < 4; x++) {
+               if (Next_shape[y][x] == 1)
+               {
+                  edge[y] = x;
+                  break;
+               }
+               if (Next_shape[y][x] == 3)
+               {
+                  edge[y] = x;
+                  break;
+               }
+            }
+         }
+         break;
 
-	//0 is check left 1 is check right 2 is check down 3is check up
-	for (flag = 0; flag < 4; flag++) {
-		//make edge by flag
-		switch (flag)
-		{
-		case 0://left 
-			   /*
-			   TODO: if x<3 -> do not rotate
-			   */
-			for (y = 0; y < 4; y++) {
-				for (x = 0; x < 4; x++) {
-					if (Next_shape[y][x] == 1)
-					{
-						edge[y] = x;
-						break;
-					}
-				}
-			}
-			break;
+      case 1://right
+         for (y = 0; y < 4; y++) {
+            for (x = 3; x >0; x--) {
+               if (Next_shape[y][x] == 1)
+               {
+                  edge[y] = x;
+                  break;
+               }
+               if (Next_shape[y][x] == 3)
+               {
+                  edge[y] = x;
+                  break;
+               }
 
-		case 1://right
-			for (y = 0; y < 4; y++) {
-				for (x = 3; x >0; x--) {
-					if (Next_shape[y][x] == 1)
-					{
-						edge[y] = x;
-						break;
-					}
+            }
+         }
+         break;
 
-				}
-			}
-			break;
+      case 2://down
+         for (x = 0; x < 4; x++) {
+            for (y = 3; y>0; y--) {
+               if (Next_shape[y][x] == 1) {
+                  edge[x] = y;
+                  break;
+               }
+               if (Next_shape[y][x] == 3) {
+                  edge[x] = y;
+                  break;
+               }
+            }
+         }
+         break;
+      case 3://up
+         for (x = 0; x < 4; x++) {
+            for (y = 0; y<4; y++) {
+               if (Next_shape[y][x] == 1) {
+                  edge[x] = y;
+                  break;
+               }
+               if (Next_shape[y][x] == 3) {
+                  edge[x] = y;
+                  break;
+               }
+            }
+         }
+         break;
 
-		case 2://down
-			for (x = 0; x < 4; x++) {
-				for (y = 3; y>0; y--) {
-					if (Next_shape[y][x] == 1) {
-						edge[x] = y;
-						break;
-					}
-				}
-			}
-			break;
-		case 3://up
-			for (x = 0; x < 4; x++) {
-				for (y = 0; y<4; y++) {
-					if (Next_shape[y][x] == 1) {
-						edge[x] = y;
-						break;
-					}
-				}
-			}
-			break;
+      }
 
-		}
-
-		//check edge by flag
-		for (i = 0; i < 4; i++) {
-			if (edge[i] != 0)
-			{
-				if (i < 2) {
-					if (block->block_x > 2)
-					{
-						if (screen[block->block_y + i][block->block_x + edge[i]] == 1)
-							return 0;
-					}
-					else
-					{
-						if (screen[block->block_y + i][block->block_x + edge[i] + 2] == 1)
-							return 0;
-					}
-				}
-				else {
-					if (screen[block->block_y + edge[i]][block->block_x + i] == 1)
-						return 0;
-				}
-			}
-		}
-		//clear edge
-		for (i = 0; i < 4; i++) {
-			edge[i] = -1; //reset
-		}
-	}
-	return 1;
+      //check edge by flag
+      for (i = 0; i < 4; i++) {
+         if (edge[i] != 0)
+         {
+            if (i < 2) {
+               if (block->block_x > 2)
+               {
+                  if (screen[block->block_y + i][block->block_x + edge[i]] == 1)
+                     return 0;
+                  if (screen[block->block_y + i][block->block_x + edge[i]] == 3)
+                     return 0;
+               }
+               else
+               {
+                  if (screen[block->block_y + i][block->block_x + edge[i] + 2] == 1)
+                     return 0;
+                  if (screen[block->block_y + i][block->block_x + edge[i] + 2] == 3)
+                     return 0;
+               }
+            }
+            else {
+               if (screen[block->block_y + edge[i]][block->block_x + i] == 1)
+                  return 0;
+               if (screen[block->block_y + edge[i]][block->block_x + i] == 3)
+                  return 0;
+            }
+         }
+      }
+      //clear edge
+      for (i = 0; i < 4; i++) {
+         edge[i] = -1; //reset
+      }
+   }
+   return 1;
 }
 /*
 Method to make block destination for use screen[y][x]=2
@@ -637,116 +663,132 @@ void effecterase(BLOCK *erase) //erase item
 void run_itemgame(BLOCK* block) // ITEM mode 
 {
 
+   int i = 0, line; //Initializing for Repetition
+   BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
+   int x, y;
+   remove_cursor(); //remove cursor on screen
 
-	int i = 0, line; //Initializing for Repetition
-	BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
-	int x, y;
-	remove_cursor(); //remove cursor on screen
+   show_nextshape(); //print the next block
+   show_score(score); // print game score
+   while (1) { //the loop ends when the game is over
+      while (1) { //the loop ends when the block is collide bottom
+               //to move block fast
+         i++;
+         if (i == 3) {
+            i = 0;
+            block->block_y++;   //if (i==3) move block one down
+         }
+         copyblock(block, future); // set future block
+         blockdestination(future); //make destination
+         control_shape(block);   // If there is a keyboard input, change the shape of the block.
 
-	show_nextshape(); //print the next block
-	show_score(score); // print game score
-	while (1) { //the loop ends when the game is over
-		while (1) { //the loop ends when the block is collide bottom
-					//to move block fast
-			i++;
-			if (i == 3) {
-				i = 0;
-				block->block_y++;   //if (i==3) move block one down
-			}
-			copyblock(block, future); // set future block
-			blockdestination(future); //make destination
-			control_shape(block);   // If there is a keyboard input, change the shape of the block.
+         input_block(block);      //Fill the screen array with blocks.
 
-			input_block(block);      //Fill the screen array with blocks.
-
-			show_screen();      //print screen
-			show_score(score); // print game score
-							   //change place(side) and direction
-
-
-							   //if next place(down) is filled break while and make new block
-			if (checkdown(block) == 0)
-			{
-				if (bombsignal == 1) // if block it bomb
-				{
-					effectbomb(block); // using item
-					bombsignal = 0; // reset condition
-					break;
-				}
-				if (erasesignal == 1)
-				{
-					effecterase(block);
-					erasesignal = 0; //reset erasesignal condition
-					break;
-				}
-				break;
-			}
-			//remove current block
-			Remove_Block(block);
-			for (y = 0; y < SCREEN_HEIGHT - 1; y++) // remove pre dstination
-			{
-				for (x = 1; x < SCREEN_WIDTH - 1; x++)
-				{
-					if (screen[y][x] == 2)
-						screen[y][x] = 0;
-				}
-			}
-			Sleep(100);      //Do nothing for 0.1 seconds.
-		}
-		while (1)
-		{
-			line = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
-			if (line == 0)   // If there are no lines to erase, break.
-			{
-				itemcnt = 0; // reset item count after checking line over
-				break;
-			}
-			else
-			{
-				itemcnt++;
-				
-			}
-			Shift_Screen(line);   //Erase the line and print out the screen.
-				score = score + 10 * 12;
-			
-			if (itemcnt == 2)
-			{
-				bombsignal = 1;
-			}
-			else if (itemcnt >= 3)
-			{
-				bombsignal = 0;
-				erasesignal = 1;
-			}
-			
-		}
-
-		if (Check_Over())   //Check to see if the game is over.
-			break;
-
-		//make new block
-		if (bombsignal == 0 && erasesignal == 0) // no anyitem
-		{
-			block = make_block(block);
-			next_shape = make_randint(7);   //make random integer 0~6
-		}
-		else if (bombsignal == 1 && erasesignal == 0) // make bombitem
-		{
-			set_cursor(5, 0);
-			block = bombitem(block);
-		}
-		else if (bombsignal == 0 && erasesignal == 1) // make bombitem
-		{
-			set_cursor(5, 0);
-			block = eraseitem(block);
-		}
-		remove_cursor();
+         show_screen();      //print screen
+         show_score(score); // print game score
+                        //change place(side) and direction
 
 
-		if (block->shape == next_shape && next_shape != 6)   //Make a variety of shapes.
-			next_shape += 1;
+                        //if next place(down) is filled break while and make new block
+         if (checkdown(block) == 0)
+         {
+            if (bombsignal == 1) // if block it bomb
+            {
+               effectbomb(block); // using item
+               bombsignal = 0; // reset condition
+               break;
+            }
+            if (erasesignal == 1)
+            {
+               effecterase(block);
+               erasesignal = 0; //reset erasesignal condition
+               break;
+            }
+            break;
+         }
+         //remove current block
+         Remove_Block(block);
+         for (y = 0; y < SCREEN_HEIGHT - 1; y++) // remove pre dstination
+         {
+            for (x = 1; x < SCREEN_WIDTH - 1; x++)
+            {
+               if (screen[y][x] == 2)
+                  screen[y][x] = 0;
+            }
+         }
+         Sleep(100);      //Do nothing for 0.1 seconds.
+         if(reverse_item_time_count!=0)
+         {
+            reverse_item_time_count--; // decrease reverse_item_time_count
+         }
+         else
+         {
+            reverse_item_on=0;   //reverse_item_time finish
+         }
+      }
+      while (1)
+      {
+         line = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
+         if (line == 0)   // If there are no lines to erase, break.
+         {
+            itemcnt = 0; // reset item count after checking line over
+            break;
+         }
+         else
+         {
+            itemcnt++;
+            
+         }
+         Shift_Screen(line);   //Erase the line and print out the screen.
+            score = score + 10 * 12;
+         
+         if (itemcnt == 2)
+         {
+            bombsignal = 1;
+         }
+         else if (itemcnt >= 3)
+         {
+            bombsignal = 0;
+            erasesignal = 1;
+         }
+         
+      }
 
-		show_nextshape();
-	}
+      if (Check_Over())   //Check to see if the game is over.
+         break;
 
+      //make new block
+      if (bombsignal == 0 && erasesignal == 0) // no anyitem
+      {
+         if(block->shape==7)
+         {               
+            if(reverse_item_on==0)
+            {
+               reverse_item_on=1; //reverse_item active
+               reverse_item_time_count = 60; // reverse_item active 10 sec.   
+            }
+            else
+               reverse_item_on=0;
+         }
+         block = item_make_block(block);
+         next_shape = make_randint(8);   //make random integer 0~7
+      }
+      else if (bombsignal == 1 && erasesignal == 0) // make bombitem
+      {
+         set_cursor(5, 0);
+         block = bombitem(block);
+      }
+      else if (bombsignal == 0 && erasesignal == 1) // make bombitem
+      {
+         set_cursor(5, 0);
+         block = eraseitem(block);
+      }
+      remove_cursor();
+
+
+      if (block->shape == next_shape && next_shape != 7)   //Make a variety of shapes.
+         next_shape += 1;
+
+      show_nextshape();
+   }
 }

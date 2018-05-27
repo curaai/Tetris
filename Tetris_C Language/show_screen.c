@@ -134,135 +134,129 @@ int Check_line(int line)
 //Intro, Game Start
 int Intro(void)
 {
-
-	int mode; // select mode
-	int userkey;// user pressd
-	set_cursor(20, 5);
-	puts("﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥   ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
-	set_cursor(20, 6);
-	puts("    ﹥     ﹥             ﹥     ﹥     ﹥      ﹥    ﹥");
-	set_cursor(20, 7);
-	puts("    ﹥     ﹥             ﹥     ﹥     ﹥      ﹥    ﹥");
-	set_cursor(20, 8);
-	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥﹥﹥﹥       ﹥     ﹥﹥﹥﹥﹥");
-	set_cursor(20, 9);
-	puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥              ﹥");
-	set_cursor(20, 10);
-	puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥              ﹥");
-	set_cursor(20, 11);
-	puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥      ﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
-	set_cursor(20, 14);
-	printf("CHOOSE GAME MODE");
-	set_cursor(20, 15);
-	printf("1.Classic");
-	set_cursor(20, 16);
-	printf("2.Item");
-	set_cursor(20, 17);
-	printf("3.AI");
-	userkey = _getch();// step for game start
-					   // we need for select mode
-	switch (userkey)
-	{
-	case 49:
-		mode = 1;
-		break;
-	case 50:
-		mode = 2;
-		break;
-	case 51:
-		mode = 3;
-		break;
-	}
-	return mode;
-
-
+   int mode; // select mode
+   int userkey;// user pressd
+   set_cursor(20, 5);
+   puts("﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥   ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
+   set_cursor(20, 6);
+   puts("    ﹥     ﹥             ﹥     ﹥     ﹥      ﹥    ﹥");
+   set_cursor(20, 7);
+   puts("    ﹥     ﹥             ﹥     ﹥     ﹥      ﹥    ﹥");
+   set_cursor(20, 8);
+   puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥﹥﹥﹥       ﹥     ﹥﹥﹥﹥﹥");
+   set_cursor(20, 9);
+   puts("    ﹥     ﹥             ﹥     ﹥  ﹥         ﹥              ﹥");
+   set_cursor(20, 10);
+   puts("    ﹥     ﹥             ﹥     ﹥    ﹥       ﹥              ﹥");
+   set_cursor(20, 11);
+   puts("    ﹥     ﹥﹥﹥﹥﹥     ﹥     ﹥      ﹥ ﹥﹥﹥﹥﹥ ﹥﹥﹥﹥﹥");
+   set_cursor(20, 14);
+   printf("CHOOSE GAME MODE");
+   set_cursor(20, 15);
+   printf("1.Classic");
+   set_cursor(20, 16);
+   printf("2.Item");
+   set_cursor(20, 17);
+   printf("3.AI");
+   userkey = _getch();// step for game start
+                  // we need for select mode
+   switch (userkey)
+   {
+   case 49:
+      mode = 1;
+      break;
+   case 50:
+      mode = 2;
+      break;
+   case 51:
+      mode = 3;
+      break;
+   }
+   return mode;
 }
 
 //show next shape
+//show next shape
 void show_nextshape(void)
 {
+   int i, j;
 
-	int i, j;
+   set_cursor(45, 2);
+   puts("Next Shape");
 
-	set_cursor(45, 2);
-	puts("Next Shape");
-
-	set_cursor(45, 3);
-	puts("﹤﹤﹤﹤﹤﹤﹤﹤");
-	//draw next blcok
-	for (i = 0; i < 6; i++) {
-		// left side cast
-		set_cursor(45, 4 + i);
-		printf("﹤");
-		//right side cast
-		set_cursor(59, 4 + i);
-		puts("﹤");
-	}
-	set_cursor(45, 10);
-	puts("﹤﹤﹤﹤﹤﹤﹤﹤");
-	set_cursor(49, 5);
-	for (i = 0; i < 4; i++)
-	{
-		set_cursor(49, 5 + i);
-		for (j = 0; j < 4; j++)
-		{
-			if (shapes[next_shape][0][i][j] == 1)
-				printf("﹥");
-			else if (shapes[next_shape][0][i][j] == 3)
-				printf("㏒");
-			else
-				printf("  ");
-		}
-	}
-
+   set_cursor(45, 3);
+   puts("﹤﹤﹤﹤﹤﹤﹤﹤");
+   //draw next blcok
+   for (i = 0; i < 6; i++) {
+      // left side cast
+      set_cursor(45, 4 + i);
+      printf("﹤");
+      //right side cast
+      set_cursor(59, 4 + i);
+      puts("﹤");
+   }
+   set_cursor(45, 10);
+   puts("﹤﹤﹤﹤﹤﹤﹤﹤");
+   set_cursor(49, 5);
+   for (i = 0; i < 4; i++)
+   {
+      set_cursor(49, 5 + i);
+      for (j = 0; j < 4; j++)
+      {
+         if (shapes[next_shape][0][i][j] == 1)
+            printf("﹥");
+         else if (shapes[next_shape][0][i][j] == 3)
+            printf("㏒");
+         else
+            printf("  ");
+      }
+   }
 }
 
 void show_score(int score)
 {
-
-	int i, j;
-	int ten_count = 0; // score 10 size
-	int size = 0; // for change weight score map size
-	set_cursor(45, 12);
-	puts("GAME SCORE");
-	for (i = 0; i < 1; i++) {
-		// left side cast
-		if (i == 0)
-		{
-			set_cursor(46, 14 + i);
-			printf("%d", score);
-		}
-		set_cursor(44, 14 + i);
-		printf("弛");
-		while (score > 0)
-		{
-			score = score / 10;
-			ten_count++;
-		}
-		if (ten_count > 8)
-		{
-			size = (ten_count - 8);
-		}
-		set_cursor(54 + size, 14 + i);
-		//right side cast
-		puts("弛");
-		ten_count = 0;
-	}
-	set_cursor(44, 13);
-	puts("忙式式式式式式式式式");
-	for (i = 1; i < 2 + size; i++)
-	{
-		set_cursor(52 + i, 13);
-		printf("式");
-	}
-	printf("忖");
-	set_cursor(44, 15);
-	puts("戌式式式式式式式式式");
-	for (i = 1; i < 2 + size; i++)
-	{
-		set_cursor(52 + i, 15);
-		printf("式");
-	}
-	printf("戎");
-
+   int i, j;
+   int ten_count = 0; // score 10 size
+   int size = 0; // for change weight score map size
+   set_cursor(45, 12);
+   puts("GAME SCORE");
+   for (i = 0; i < 1; i++) {
+      // left side cast
+      if (i == 0)
+      {
+         set_cursor(46, 14 + i);
+         printf("%d", score);
+      }
+      set_cursor(44, 14 + i);
+      printf("弛");
+      while (score > 0)
+      {
+         score = score / 10;
+         ten_count++;
+      }
+      if (ten_count > 8)
+      {
+         size = (ten_count - 8);
+      }
+      set_cursor(54 + size, 14 + i);
+      //right side cast
+      puts("弛");
+      ten_count = 0;
+   }
+   set_cursor(44, 13);
+   puts("忙式式式式式式式式式");
+   for (i = 1; i < 2 + size; i++)
+   {
+      set_cursor(52 + i, 13);
+      printf("式");
+   }
+   printf("忖");
+   set_cursor(44, 15);
+   puts("戌式式式式式式式式式");
+   for (i = 1; i < 2 + size; i++)
+   {
+      set_cursor(52 + i, 15);
+      printf("式");
+   }
+   printf("戎");
 }
