@@ -489,7 +489,7 @@ void control_shape(BLOCK* block)
 }
 
 //if game is voer return 1 else return 0
-int Check_Over(int score)
+int check_Over(int score)
 {
    int i;
 
@@ -586,7 +586,7 @@ void run_game(BLOCK* block)
          score = score + 10 * 12;
       }
 
-      if (Check_Over(score))   //Check to see if the game is over.
+      if (check_Over(score))   //Check to see if the game is over.
          break;
 
       //make new block
@@ -782,7 +782,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
          
       }
 
-      if (Check_Over(score))   //Check to see if the game is over.
+      if (check_Over(score))   //Check to see if the game is over.
          break;
 
       //make new block
