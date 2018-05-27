@@ -5,64 +5,68 @@
 //set cursor point
 void set_cursor(int x, int y)
 {
-	COORD pos = { x,y };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+   COORD pos = { x,y };
+   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 //remove cursor point
 void remove_cursor()
 {
-	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_CURSOR_INFO info;
-	info.dwSize = 100;
-	info.bVisible = FALSE;
-	SetConsoleCursorInfo(consoleHandle, &info);
+   HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+   CONSOLE_CURSOR_INFO info;
+   info.dwSize = 100;
+   info.bVisible = FALSE;
+   SetConsoleCursorInfo(consoleHandle, &info);
 }
 //Method to make tetris map use array
 void fill_screen()
 {
-	int i;
+   int i;
 
-	//fill the edge right,left to array number
-	for (i = 0; i < SCREEN_HEIGHT; i++) {
-		screen[i][0] = 1;
-		screen[i][SCREEN_WIDTH - 1] = 1;
-	}
-	//fill the edge of downside to array number
-	for (i = 1; i < SCREEN_WIDTH; i++) {
-		screen[SCREEN_HEIGHT - 1][i] = 1;
-	}
+   //fill the edge right,left to array number
+   for (i = 0; i < SCREEN_HEIGHT; i++) {
+      screen[i][0] = 1;
+      screen[i][SCREEN_WIDTH - 1] = 1;
+   }
+   //fill the edge of downside to array number
+   for (i = 1; i < SCREEN_WIDTH; i++) {
+      screen[SCREEN_HEIGHT - 1][i] = 1;
+   }
 }
 //Method to draw block if screen[][]=1 
 void show_screen(void)
 {
-	int i, j;
+   int i, j;
 
-	//print screen
-	for (i = 0; i < SCREEN_HEIGHT; i++) {
-		set_cursor(5, 2 + i);
+   //print screen
+   for (i = 0; i < SCREEN_HEIGHT; i++) {
+      set_cursor(5, 2 + i);
 
-		for (j = 0; j < SCREEN_WIDTH; j++) {
-			if (screen[i][j] == 2) // block destination
-			{
-				printf("¡à");
-			}
-			else if (screen[i][j] == 1)
-			{
-				if (j == SCREEN_LEFT_EDGE && i == SCREEN_DOWN_EDGE)
-					printf("¢É");  //map
-				else if (j == SCREEN_RIGHT_EDGE && i == SCREEN_DOWN_EDGE)
-					printf("¢Ê");  //map
-				else if (j == SCREEN_LEFT_EDGE || j == SCREEN_RIGHT_EDGE)
-					printf("¢È");  //map
-				else if (i == SCREEN_DOWN_EDGE)
-					printf("¢Ç");  //map
-				else
-					printf("¡á"); //user block
-			}
-			else
-				printf("  ");
-		}
-	}
+      for (j = 0; j < SCREEN_WIDTH; j++) {
+         if (screen[i][j] == 2) // block destination
+         {
+            printf("¡à");
+         }
+         else if(screen[i][j] == 3)
+         {
+            printf("¡ê");
+         }
+         else if (screen[i][j] == 1)
+         {
+            if (j == SCREEN_LEFT_EDGE && i == SCREEN_DOWN_EDGE)
+               printf("¢É");  //map
+            else if (j == SCREEN_RIGHT_EDGE && i == SCREEN_DOWN_EDGE)
+               printf("¢Ê");  //map
+            else if (j == SCREEN_LEFT_EDGE || j == SCREEN_RIGHT_EDGE)
+               printf("¢È");  //map
+            else if (i == SCREEN_DOWN_EDGE)
+               printf("¢Ç");  //map
+            else
+               printf("¡á"); //user block
+         }
+         else
+            printf("  ");
+      }
+   }
 
 }
 
@@ -72,38 +76,41 @@ and if line is full then Return y(line number)
 */
 int Clear_Line(void)
 {
-	int x, y; //
-	int count = 0;// count to block number in one line
+   int x, y; //
+   int count = 0;// count to block number in one line
 
-	for (y = SCREEN_HEIGHT - 2; y > 0; y--) {
-		if (Check_line(y))
-		{
-			count = 0; // reset count
-			for (x = 1; x < SCREEN_WIDTH - 1; x++) {
+   for (y = SCREEN_HEIGHT - 2; y > 0; y--) {
+      if (Check_line(y))
+      {
+         count = 0; // reset count
+         for (x = 1; x < SCREEN_WIDTH - 1; x++) {
 
-				if (screen[y][x] == 1) {
-					count += 1; //count to block (1*1)
-				}
-			}
-			if (count == SCREEN_WIDTH - 2) {// if fill line
-				return y; //return line number
-			}
-		}
-	}
+            if (screen[y][x] == 1) {
+               count += 1; //count to block (1*1)
+            }
+            if (screen[y][x] == 3) {
+               count += 1; //count to block (1*1)
+            }
+         }
+         if (count == SCREEN_WIDTH - 2) {// if fill line
+            return y; //return line number
+         }
+      }
+   }
 
-	return 0;
+   return 0;
 }
 
 //Method to move down block ,if fill line delete
 void Shift_Screen(int y)
 {
-	int x; // width
+   int x; // width
 
-	for (; y > 0; y--) {//check from down to up
-		for (x = 1; x < SCREEN_WIDTH - 1; x++) {//one line in the map
-			screen[y][x] = screen[y - 1][x]; // move to down
-		}
-	}
+   for (; y > 0; y--) {//check from down to up
+      for (x = 1; x < SCREEN_WIDTH - 1; x++) {//one line in the map
+         screen[y][x] = screen[y - 1][x]; // move to down
+      }
+   }
 }
 
 /*
@@ -111,19 +118,23 @@ if something in the line return 1
 */
 int Check_line(int line)
 {
-	int i;
+   int i;
 
-	for (i = 1; i < SCREEN_WIDTH - 2; i++) {// check in one line
-		if (screen[line][i] == 1) { // whatever in line
-			return 1;
-		}
-	}
-	return 0;
+   for (i = 1; i < SCREEN_WIDTH - 2; i++) {// check in one line
+      if (screen[line][i] == 1) { // whatever in line
+         return 1;
+      }
+      if (screen[line][i] == 3) { // whatever in line
+         return 1;
+      }
+   }
+   return 0;
 }
 
 //Intro, Game Start
 int Intro(void)
 {
+
 	int mode; // select mode
 	int userkey;// user pressd
 	set_cursor(20, 5);
@@ -163,12 +174,14 @@ int Intro(void)
 		break;
 	}
 	return mode;
+
+
 }
 
 //show next shape
-//show next shape
 void show_nextshape(void)
 {
+
 	int i, j;
 
 	set_cursor(45, 2);
@@ -201,10 +214,12 @@ void show_nextshape(void)
 				printf("  ");
 		}
 	}
+
 }
 
 void show_score(int score)
 {
+
 	int i, j;
 	int ten_count = 0; // score 10 size
 	int size = 0; // for change weight score map size
@@ -249,4 +264,5 @@ void show_score(int score)
 		printf("¦¡");
 	}
 	printf("¦¥");
+
 }

@@ -3,7 +3,9 @@
 
 int make_randint(int limit);
 BLOCK* first_block(void);
+BLOCK* item_first_block(void);
 BLOCK* make_block(BLOCK* pre);
+BLOCK* item_make_block(BLOCK* pre);
 void input_block(BLOCK* block);
 int checkdown(BLOCK* block);
 void Remove_Block(BLOCK* block);
