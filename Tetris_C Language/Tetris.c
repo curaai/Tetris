@@ -2,6 +2,9 @@
 #include "shapes.h"
 #include "tetris_function.h"
 #include "show.h"
+#define first_x 5
+#define first_y 0
+#define first_direction 0
 int score = 0; // game score
 int bombsignal = 0; // signal of bombitem
 int erasesignal = 0; // signal of erase item
@@ -14,8 +17,10 @@ int reverse_item_time_count = 0;
              */
 int make_randint(int limit)
 {
-   srand((unsigned)time(NULL));
-   return rand() % limit;      //returns random number below the limit; //todo: should not restore the formula immediately.
+	int rand_int;
+    srand((unsigned)time(NULL));
+	rand_int = rand() % limit;
+    return rand_int;      //returns random number below the limit; //todo: should not restore the formula immediately.
 }
 
 BLOCK* first_block(void)
@@ -26,9 +31,9 @@ BLOCK* first_block(void)
 
    //state == 0 is touched base 1 is falling
    block->shape = make_randint(7);      //Store a random number below 7 in block -> shape.
-   block->block_x = 5;      //todo: Use a constant
-   block->block_y = 0; // Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; // Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x;      //todo: Use a constant
+   block->block_y = first_y; // Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; // Specify the rotating state of the block.//todo: Use a constant
 
    return block;
 }
@@ -41,9 +46,9 @@ BLOCK* item_first_block(void)
 
    //state == 0 is touched base 1 is falling
    block->shape = make_randint(8);      //Store a random number below 8 in block -> shape.
-   block->block_x = 5;      //todo: Use a constant
-   block->block_y = 0; // Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; // Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x;      //todo: Use a constant
+   block->block_y = first_y; // Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; // Specify the rotating state of the block.//todo: Use a constant
 
    return block;
 }
@@ -60,9 +65,9 @@ BLOCK* make_block(BLOCK* pre)
    //state == 0 is touched base 1 is falling
    block->shape = next_shape; //Save the next_shape value in block - > shape.
    next_shape = rand() % 7; //Save the new random number below 7 in the next-shape.
-   block->block_x = 5; //todo: Use a constant
-   block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x; //todo: Use a constant
+   block->block_y = first_y; //Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; //Specify the rotating state of the block.//todo: Use a constant
    free(pre); //eliminate the previous block
 
    return block;
@@ -77,9 +82,9 @@ BLOCK* item_make_block(BLOCK* pre)
    //state == 0 is touched base 1 is falling
    block->shape = next_shape; //Save the next_shape value in block - > shape.
    next_shape = rand() % 8; //Save the new random number below 8 in the next-shape.
-   block->block_x = 5; //todo: Use a constant
-   block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x; //todo: Use a constant
+   block->block_y = first_y; //Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; //Specify the rotating state of the block.//todo: Use a constant
    free(pre); //eliminate the previous block
 
    return block;
@@ -89,7 +94,9 @@ Method to change the part of the screen array where the block exists to 1.
 */
 void input_block(BLOCK* block)
 {
-   int x, y, shape, direction;   //todo: Each variable is declared in one row
+	int x, y;
+	int shape;
+	int direction;   //todo: Each variable is declared in one row
 
    shape = block->shape;
    direction = block->direction;   //Save the block's state in each x, y, shape, direction.
@@ -111,9 +118,11 @@ void input_block(BLOCK* block)
 /*
 Method to change the part of the screen array where the block exists to 0.
 */
-void Remove_Block(BLOCK* block)      //todo: Replace the first letter with a lowercase letter
+void remove_Block(BLOCK* block)      //todo: Replace the first letter with a lowercase letter
 {
-   int x, y, shape, direction;      //todo: Each variable is declared in one row
+	int x, y;
+	int shape;
+	int direction;      //todo: Each variable is declared in one row
 
    shape = block->shape;
    direction = block->direction;   //Save the block's state in each x, y, shape,
@@ -142,8 +151,10 @@ if somthing in downside return 0
 */
 int checkdown(BLOCK* block)
 {
-   int x, y, shape, direction;
-   int edge[4] = { 0,0,0,0 };// use for marking edge
+	int x, y;
+	int shape;
+	int direction;
+    int edge[4] = { 0,0,0,0 };// use for marking edge
                        //setting local variable from factor
    shape = block->shape;
    direction = block->direction;
@@ -179,8 +190,10 @@ if somthing in leftside return 0
 */
 int checkleft(BLOCK* block)
 {
-   int x, y, shape, direction;
-   int edge[4] = { -1,-1,-1,-1 };// use for marking edge
+	int x, y;
+	int shape;
+	int direction;
+    int edge[4] = { -1,-1,-1,-1 };// use for marking edge
                           //setting local variable from factor
    shape = block->shape;
    direction = block->direction;
@@ -218,8 +231,10 @@ if somthing in rightside return 0
 */
 int checkright(BLOCK* block)
 {
-   int x, y, shape, direction;
-   int edge[4] = { -1,-1,-1,-1 }; // use for marking edge
+	int x, y;
+	int shape;
+	int direction;
+    int edge[4] = { -1,-1,-1,-1 }; // use for marking edge
                            //setting local variable from factor
    shape = block->shape;
    direction = block->direction;
@@ -252,12 +267,15 @@ int checkright(BLOCK* block)
 }
 
 //check the next shape place
-int checkshape(BLOCK* block)
+int checkrotate(BLOCK* block)
 {
-   int x, y, shape, direction, next_direction;
-   int i, flag, plus_y = 0, plus_x = 0;
-   int Next_shape[4][4] = { 0 }; // all thing set 0
-   int edge[4] = { -1, -1, -1, -1 };
+	int x, y;
+	int shape;
+	int direction;
+	int next_direction;
+    int i, flag, plus_y = 0, plus_x = 0;
+    int Next_shape[4][4] = { 0 }; // all thing set 0
+    int edge[4] = { -1, -1, -1, -1 };
    //setting local variable from factor
    shape = block->shape;
    direction = block->direction;
@@ -393,7 +411,9 @@ and show block detination
 void blockdestination(BLOCK *future)
 {
 
-   int x, y, shape, direction;
+	int x, y;
+	int shape;
+	int direction;
 
    while (checkdown(future)) // blcok down while screen[y][x]=1
       future->block_y++;
@@ -425,7 +445,7 @@ void control_shape(BLOCK* block)
       switch (key)
       {
       case UP://rotate block
-         if (checkshape(block) == 1) {
+         if (checkrotate(block) == 1) {
             block->direction++;
             block->direction %= 4; // limit rotate
          }
@@ -469,7 +489,7 @@ void control_shape(BLOCK* block)
 }
 
 //if game is voer return 1 else return 0
-int Check_Over(void)
+int Check_Over(int score)
 {
    int i;
 
@@ -479,6 +499,9 @@ int Check_Over(void)
          system("cls");
          set_cursor(30, 10);
          printf("YOU LOSE!");
+		 set_cursor(30, 11);
+		 printf("최종 점수:%d", score);
+		 set_cursor(30, 12);
          return 1;
       }
       if (screen[1][5 + i] == 3 )
@@ -486,6 +509,9 @@ int Check_Over(void)
          system("cls");
          set_cursor(30, 10);
          printf("YOU LOSE!");
+		 set_cursor(30, 11);
+		 printf("최종 점수:%d",score);
+		 set_cursor(30, 12);
          return 1;
       }
    }
@@ -508,7 +534,8 @@ Print the block, Remove the completed line, Check whether the game is over
 */
 void run_game(BLOCK* block)
 {
-   int i = 0, line; //Initializing for Repetition
+   int i = 0;
+   int line_num;//Initializing for Repetition
    int score = 0; // game score
    BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
    int x, y;
@@ -539,7 +566,7 @@ void run_game(BLOCK* block)
          if (checkdown(block) == 0)
             break;
          //remove current block
-         Remove_Block(block);
+         remove_Block(block);
          for (y = 0; y < SCREEN_HEIGHT; y++) // remove pre dstination
          {
             for (x = 0; x < SCREEN_WIDTH; x++)
@@ -552,14 +579,14 @@ void run_game(BLOCK* block)
       }
       while (1)
       {
-         line = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
-         if (line == 0)   // If there are no lines to erase, break.
+		  line_num = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
+         if (line_num == 0)   // If there are no lines to erase, break.
             break;
-         Shift_Screen(line);   //Erase the line and print out the screen.
+         Shift_Screen(line_num);   //Erase the line and print out the screen.
          score = score + 10 * 12;
       }
 
-      if (Check_Over())   //Check to see if the game is over.
+      if (Check_Over(score))   //Check to see if the game is over.
          break;
 
       //make new block
@@ -584,9 +611,9 @@ BLOCK *bombitem(BLOCK *pre)
    //state == 0 is touched base 1 is falling
    block->shape = 8; //Save the next_shape value in block - > shape.
    next_shape = rand() % 8; //Save the new random number below 7 in the next-shape.
-   block->block_x = 5; //todo: Use a constant
-   block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x; //todo: Use a constant
+   block->block_y = first_y; //Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; //Specify the rotating state of the block.//todo: Use a constant
    free(pre);
    return block;
 }
@@ -599,9 +626,9 @@ BLOCK *eraseitem(BLOCK *pre)
    //state == 0 is touched base 1 is falling
    block->shape = 8; //Save the next_shape value in block - > shape.
    next_shape = rand() % 8; //Save the new random number below 7 in the next-shape.
-   block->block_x = 5; //todo: Use a constant
-   block->block_y = 0; //Specify where the block will occur. //todo: Use a constant
-   block->direction = 0; //Specify the rotating state of the block.//todo: Use a constant
+   block->block_x = first_x; //todo: Use a constant
+   block->block_y = first_y; //Specify where the block will occur. //todo: Use a constant
+   block->direction = first_direction; //Specify the rotating state of the block.//todo: Use a constant
    free(pre);
    return block;
 }
@@ -663,7 +690,8 @@ void effecterase(BLOCK *erase) //erase item
 void run_itemgame(BLOCK* block) // ITEM mode 
 {
 
-   int i = 0, line; //Initializing for Repetition
+   int i = 0; //Initializing for Repetition
+   int line_num;
    BLOCK *future = (BLOCK*)malloc(sizeof(BLOCK));
    int x, y;
    remove_cursor(); //remove cursor on screen
@@ -707,7 +735,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
             break;
          }
          //remove current block
-         Remove_Block(block);
+         remove_Block(block);
          for (y = 0; y < SCREEN_HEIGHT - 1; y++) // remove pre dstination
          {
             for (x = 1; x < SCREEN_WIDTH - 1; x++)
@@ -728,8 +756,8 @@ void run_itemgame(BLOCK* block) // ITEM mode
       }
       while (1)
       {
-         line = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
-         if (line == 0)   // If there are no lines to erase, break.
+		  line_num = Clear_Line();   /*Check how many lines are cleared, and then insert the value into the line variable. */
+         if (line_num == 0)   // If there are no lines to erase, break.
          {
             itemcnt = 0; // reset item count after checking line over
             break;
@@ -739,7 +767,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
             itemcnt++;
             
          }
-         Shift_Screen(line);   //Erase the line and print out the screen.
+         Shift_Screen(line_num);   //Erase the line and print out the screen.
             score = score + 10 * 12;
          
          if (itemcnt == 2)
@@ -754,7 +782,7 @@ void run_itemgame(BLOCK* block) // ITEM mode
          
       }
 
-      if (Check_Over())   //Check to see if the game is over.
+      if (Check_Over(score))   //Check to see if the game is over.
          break;
 
       //make new block
