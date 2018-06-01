@@ -214,4 +214,5 @@ int shapes[10][4][4][4] = {
 
 int screen[SCREEN_HEIGHT][SCREEN_WIDTH];
 int edge[SCREEN_WIDTH];
+float scoremap[4][12] = { 0 };
 int next_shape;
