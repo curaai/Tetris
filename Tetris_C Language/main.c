@@ -33,7 +33,7 @@ int main(void)
       fill_screen();// make the tetris map
       show_screen();// make all thing 
 
-      run_game(block);// run the game
+	  run_AIgame(block);// run the game
    }
    return 0;
 }
