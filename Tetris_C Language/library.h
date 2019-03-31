@@ -21,7 +21,7 @@
 #define SCREEN_LEFT_EDGE 0 
 #define SCREEN_RIGHT_EDGE 13
 #define SCREEN_DOWN_EDGE 25
-#define SHAPES 7
+#define SHAPES 10
 
 typedef struct _BLOCK
 {
